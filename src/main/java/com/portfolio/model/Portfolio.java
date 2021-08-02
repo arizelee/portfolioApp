@@ -26,6 +26,13 @@ public class Portfolio {
         return id;
     }
 
+    public double getProfit() {
+        return profit;
+    }
+    public void setProfit(double profit) {
+        this.profit = profit;
+    }
+
     public String getName() {
         return name;
     }
@@ -40,9 +47,5 @@ public class Portfolio {
 
     public void deleteTicker(String id) {
         tickers.removeIf(ticker -> ticker.getId().equalsIgnoreCase(id));
-    }
-
-    public void setProfit(double profit) {
-        this.profit = profit;
     }
 }

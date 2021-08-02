@@ -7,6 +7,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.session.InMemoryWebSessionStore;
 
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicLong;
 
 @Service
 public class PortfolioService {
@@ -107,8 +110,30 @@ public class PortfolioService {
     }
 
     private void generatePortfolioValue(Portfolio portfolio) {
-        double newValue = 9;
-        portfolio.setProfit(newValue);
+        AtomicLong value = new AtomicLong(Double.doubleToLongBits(portfolio.getProfit()));
+
+        ExecutorService ex = Executors.newFixedThreadPool(5);
+
+        for(StockTicker ticker: portfolio.getTickers()) {
+            ex.execute(new StockVal(value, ticker.getSymbolName()));
+        }
+
+        portfolio.setProfit(value.doubleValue());
+    }
+
+    public class StockVal implements Runnable {
+        AtomicLong al = null;
+
+        StockVal(AtomicLong al, String symbolName) {
+            this.al = al;
+        }
+
+        @Override
+        public void run() {
+            //TODO CALL API with symbolName, and retrieve stockValue
+            long stockValue = 0; //stock price
+            this.al.addAndGet(stockValue);
+        }
     }
 }
 

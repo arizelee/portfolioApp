@@ -12,7 +12,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/portfolio")
-@CrossOrigin(origins = "http://localhost:8080")
 public class PortfolioController  {
 
     @Autowired
